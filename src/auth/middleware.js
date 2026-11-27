@@ -1,6 +1,5 @@
-import db from "../db/schema.js";
 import crypto from "node:crypto";
-
+import db from "../db/schema.js";
 export const authenticate = (req, res, next) => {
 try {
         // 1. Get raw token from cookie

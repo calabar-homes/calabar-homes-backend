@@ -1,5 +1,6 @@
 import multer from "multer";
 import path from "node:path";
+import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import fs from "fs";
 
@@ -13,11 +14,40 @@ if (!fs.existsSync(uploadDir)) {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, uploadDir);
+        let destination;
+
+        // User avatar
+        if (file.fieldname === "avatar") {
+            destination = path.join(uploadDir, "avatars/");
+        }
+
+        // General user files
+        else if (file.fieldname === "file") {
+            if (!req.user?.id) {
+                return cb(new Error("Authenticated user ID missing"));
+            }
+
+            destination = path.join(
+                uploadDir,
+                "obj",
+                `box-${req.user.id}`
+            );
+        }
+
+        else {
+            return cb(new Error("Invalid upload field"));
+        }
+
+        fs.mkdir(destination, { recursive: true }, (err) => {
+            if (err) return cb(err);
+            cb(null, destination);
+        });
     },
 
     filename: (req, file, cb) => {
-        const uniqueName = `${Date.now()}-${crypto.randomUUID()}${path.extname(file.originalname).toLowerCase()}`;
+        const extension = path.extname(file.originalname).toLowerCase();
+
+        const uniqueName = `${randomUUID()}${extension}`;
 
         cb(null, uniqueName);
     }

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> calabar-homes-origin/main
 # Logs
 logs
 *.log
@@ -159,3 +155,4 @@ vite.config.ts.timestamp-*
 .nx/cache
 .nx/workspace-data
 .nx/migrate-runs
+host.txt

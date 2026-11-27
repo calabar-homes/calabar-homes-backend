@@ -5,9 +5,16 @@ import { uploadController } from "./controller.js";
 
 const storageRouter = Router();
 storageRouter.post(
-    "/upload",
+    "/avatar",
     authenticate,
     upload.single("avatar"),
+    uploadController
+);
+
+storageRouter.post(
+    "/box",
+    authenticate,
+    upload.single("file"),
     uploadController
 );
 
